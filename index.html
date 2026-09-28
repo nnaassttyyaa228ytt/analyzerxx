@@ -298,214 +298,180 @@ onclick="resetAnalysis()"
 </div>
 </div>
 <script>
-/* =========================================
-РЕЗУЛЬТАТЫ
-========================================= */
+
 const results = [
-"профессиональный долбоёб по результатам независимой экспертизы.",
-"официально подозрительный человек.",
-"имеет критически низкий уровень адекватности.",
-"слишком много думает о всякой хуете.",
-"в целом нормальный это не точно.",
-"опасно близок к званию главного долбоёба месяца.",
-"выглядит как человек, который скажет «я всё объясню».",
-"обладает уникальной способностью принимать странные решения.",
-"эксперты отказались давать комментарии.",
-"имеет признаки хронического долбоебизма.",
-"слишком уверенно делает хуйню.",
-"система обнаружила подозрительно высокий уровень тупняка.",
-"ментально всё ещё находится в 2017 году.",
-"вероятность нормального решения крайне низкая.",
-"способен испортить даже идеально спланированный день.",
-"опасно харизматичный идиот.",
-"человек-загадка.  он сам не знает, что происходит.",
-"по документам человек. к поведению есть вопросы.",
-"система не смогла определить уровень адекватности.",
-"рекомендуется держать под наблюдением.",
-"мозг работает. иногда.",
-"имеет талант находить проблемы там, где их не существовало.",
-"вероятность того, что он опять что-нибудь выкинет — 100%.",
-"слишком подозрительно нормальный.",
-"обнаружено чрезмерное количество странных решений.",
-"потенциально хороший человек, но расследование продолжается.",
-"имеет лицензию на совершение хуйню.",
-"с научной точки зрения объяснить его поведение невозможно.",
-"мозг загружен на 12%. остальные 88% заняты хернёй.",
-"исследование завершено. результат лучше никому не показывать."
-"исследование завершено. хуй 14 см если понравишься."
+    "профессиональный долбоёб по результатам независимой экспертизы.",
+    " подозрительный человек.",
+    "имеет критически низкий уровень адекватности.",
+    "слишком много думает о всякой хуете.",
+    "в целом нормальный.  это не точно.",
+    "опасно близок к званию главного долбоёба месяца.",
+    "воздухан.",
+    "обладает уникальной способностью принимать странные решения.",
+    "эксперты отказались давать комментарии.",
+    "имеет признаки хронического долбоебизма.",
+    "слишком уверенно делает хуйню.",
+    "система обнаружила подозрительно высокий уровень тупняка.",
+    "ментально всё ещё находится в 2017 году.",
+    "вероятность нормального решения крайне низкая.",
+    "способен испортить даже идеально спланированный день.",
+    "опасно харизматичный идиот.",
+    "человек-загадка.он сам не знает, что происходит.",
+    "по документам человек. к поведению есть вопросы.",
+    "система не смогла определить уровень адекватности.",
+    "рекомендуется держать под наблюдением.",
+    "мозг работает. иногда.",
+    "имеет талант находить проблемы там, где их не существовало.",
+    "вероятность того, что он опять что-нибудь выкинет — 100%.",
+    "слишком подозрительно нормальный.",
+    "обнаружено чрезмерное количество странных решений.",
+    "потенциально хороший человек, но расследование продолжается.",
+    "с научной точки зрения объяснить его поведение невозможно.",
+    "мозг загружен на 12%. остальные 88% заняты хернёй."\
+    "хуй 14 см если понравишься."
+
+
+
 ];
-/* =========================================
-СТАТУСЫ АНАЛИЗА
-========================================= */
+
 const statuses = [
-"подключение к мозгу...",
-"проверяем адекватность...",
-"сканируем историю странных решений...",
-"проверяем здравый смысл...",
-"сравниваем с базой долбоёбов...",
-"оцениваем опасность...",
-"запрашиваем мнение экспертов...",
-"формируем заключение..."
+    "подключение к мозгу...",
+    "проверяем адекватность...",
+    "сканируем историю странных решений...",
+    "проверяем здравый смысл...",
+    "сравниваем с базой долбоёбов...",
+    "оцениваем опасность...",
+    "запрашиваем мнение экспертов...",
+    "формируем заключение..."
 ];
-/* =========================================
-ЗАПУСК АНАЛИЗА
-========================================= */
+
+
 function startAnalysis() {
-const name =
-document.getElementById("name")
-.value
-.trim();
-const age =
-document.getElementById("age")
-.value
-.trim();
-/* ПРОВЕРКА ИМЕНИ */
-if (name === "") {
-alert("Введите имя 😭");
-document
-.getElementById("name")
-.focus();
-return;
+
+    const nameInput = document.getElementById("name");
+    const ageInput = document.getElementById("age");
+
+    const name = nameInput.value.trim();
+    const age = ageInput.value.trim();
+
+    if (name === "") {
+        alert("Введите имя 😭");
+        nameInput.focus();
+        return;
+    }
+
+    if (age === "") {
+        alert("Введите возраст 😭");
+        ageInput.focus();
+        return;
+    }
+
+    document.getElementById("form").style.display = "none";
+    document.getElementById("analysis").style.display = "block";
+    document.getElementById("result").style.display = "none";
+
+    const status = document.getElementById("status");
+    const bar = document.getElementById("bar");
+
+    let step = 0;
+
+    status.textContent = statuses[0];
+    bar.style.width = "0%";
+
+    const timer = setInterval(function() {
+
+        if (step < statuses.length) {
+
+            status.textContent = statuses[step];
+
+            const progress =
+                ((step + 1) / statuses.length) * 100;
+
+            bar.style.width = progress + "%";
+
+            step++;
+
+        } else {
+
+            clearInterval(timer);
+
+            showResult(name, age);
+        }
+
+    }, 600);
 }
-/* ПРОВЕРКА ВОЗРАСТА */
-if (age === "") {
-alert("Введите возраст 😭");
-document
-.getElementById("age")
-.focus();
-return;
-}
-/* ПЕРЕКЛЮЧАЕМ ЭКРАН */
-document
-.getElementById("form")
-.style.display = "none";
-document
-.getElementById("analysis")
-.style.display = "block";
-/* СБРАСЫВАЕМ ПРОГРЕСС */
-document
-.getElementById("bar")
-.style.width = "0%";
-let step = 0;
-/* АНИМАЦИЯ АНАЛИЗА */
-const timer = setInterval(function() {
-document
-.getElementById("status")
-.textContent = statuses[step];
-document
-.getElementById("bar")
-.style.width =
-((step + 1) / statuses.length * 100) + "%";
-step++;
-/* АНАЛИЗ ЗАКОНЧЕН */
-if (step >= statuses.length) {
-clearInterval(timer);
-setTimeout(function() {
-showResult(name, age);
-}, 500);
-}
-}, 450);
-}
-/* =========================================
-ПОКАЗ РЕЗУЛЬТАТА
-========================================= */
+
+
 function showResult(name, age) {
-/* СЛУЧАЙНЫЙ РЕЗУЛЬТАТ */
-const random =
-Math.floor(
-Math.random() * results.length
-);
-/* УРОВЕНЬ ДОЛБОЕБИЗМА */
-const idiot =
-Math.floor(
-Math.random() * 31
-) + 70;
-/* ОПАСНОСТЬ */
-const danger =
-Math.floor(
-Math.random() * 51
-) + 35;
-/* ПРЯЧЕМ АНАЛИЗ */
-document
-.getElementById("analysis")
-.style.display = "none";
-/* ПОКАЗЫВАЕМ РЕЗУЛЬТАТ */
-document
-.getElementById("result")
-.style.display = "block";
-/* ИМЯ И ВОЗРАСТ */
-document
-.getElementById("resultName")
-.textContent =
-name + ", " + age + " лет";
-/* ТЕКСТ РЕЗУЛЬТАТА */
-document
-.getElementById("resultText")
-.textContent =
-results[random];
-/* ПРОЦЕНТЫ */
-document
-.getElementById("idiot")
-.textContent =
-idiot + "%";
-document
-.getElementById("danger")
-.textContent =
-danger + "%";
+
+    const randomResult =
+        results[Math.floor(Math.random() * results.length)];
+
+    const idiot =
+        Math.floor(Math.random() * 31) + 70;
+
+    const danger =
+        Math.floor(Math.random() * 51) + 35;
+
+
+    document.getElementById("analysis").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+
+    document.getElementById("resultName").textContent =
+        name + ", " + age + " лет";
+
+
+    document.getElementById("resultText").textContent =
+        randomResult;
+
+
+    document.getElementById("idiot").textContent =
+        idiot + "%";
+
+
+    document.getElementById("danger").textContent =
+        danger + "%";
 }
-/* =========================================
-АНАЛИЗИРОВАТЬ ЕЩЁ РАЗ
-========================================= */
+
+
 function resetAnalysis() {
-document
-.getElementById("result")
-.style.display = "none";
-document
-.getElementById("analysis")
-.style.display = "none";
-document
-.getElementById("form")
-.style.display = "block";
-document
-.getElementById("name")
-.value = "";
-document
-.getElementById("age")
-.value = "";
-document
-.getElementById("bar")
-.style.width = "0%";
-document
-.getElementById("status")
-.textContent =
-"Подключение к мозгу...";
-document
-.getElementById("name")
-.focus();
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("analysis").style.display = "none";
+    document.getElementById("form").style.display = "block";
+
+    document.getElementById("name").value = "";
+    document.getElementById("age").value = "";
+
+    document.getElementById("bar").style.width = "0%";
+
+    document.getElementById("status").textContent =
+        "Подключение к мозгу...";
+
 }
-/* =========================================
-ENTER = ЗАПУСТИТЬ АНАЛИЗ
-========================================= */
-document
-.getElementById("name")
-.addEventListener(
-"keydown",
-function(event) {
-if (event.key === "Enter") {
-startAnalysis();
-}
-}
-);
-document
-.getElementById("age")
-.addEventListener(
-"keydown",
-function(event) {
-if (event.key === "Enter") {
-startAnalysis();
-}
-}
-);
+
+
+/* Enter тоже запускает анализ */
+
+document.getElementById("name").addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        startAnalysis();
+    }
+
+});
+
+
+document.getElementById("age").addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        startAnalysis();
+    }
+
+});
+
 </script>
+
 </body>
 </html>

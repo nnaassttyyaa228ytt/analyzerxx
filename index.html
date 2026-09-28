@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Анализатор</title>
+<title>анализатор долбоебов</title>
 <style>
 * {
 box-sizing: border-box;
@@ -11,106 +11,501 @@ box-sizing: border-box;
 body {
 margin: 0;
 min-height: 100vh;
+background: #17212b;
+color: #ffffff;
 font-family: Arial, sans-serif;
-background: #f3f3f3;
-display: flex;
-justify-content: center;
-align-items: center;
+padding: 20px;
 }
-.container {
-width: 90%;
-max-width: 500px;
-background: white;
-padding: 30px;
-border-radius: 25px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-text-align: center;
+.app {
+max-width: 420px;
+margin: auto;
 }
-.main-image {
-width: 100%;
-max-width: 350px;
-height: auto;
-border-radius: 20px;
+/* КАРТИНКА ВМЕСТО КОЛБЫ */
+.logo-image {
 display: block;
-margin: 0 auto 25px;
+width: 150px;
+height: 150px;
+object-fit: cover;
+margin: 25px auto 15px;
+border-radius: 25px;
 }
-h1 {
-margin: 0 0 20px;
-font-size: 28px;
+/* Если картинка не загрузилась */
+.logo-image.error {
+display: none;
 }
-textarea {
+.subtitle {
+text-align: center;
+color: #8d9aa6;
+margin-bottom: 25px;
+font-size: 15px;
+}
+.card {
+background: #202b36;
+border-radius: 24px;
+padding: 22px;
+}
+label {
+display: block;
+color: #aeb9c2;
+font-size: 14px;
+margin: 15px 0 7px;
+}
+input {
 width: 100%;
-height: 120px;
-resize: none;
-padding: 15px;
-border: 2px solid #ddd;
-border-radius: 15px;
-font-size: 16px;
+height: 52px;
+border: none;
 outline: none;
-margin-bottom: 15px;
+border-radius: 14px;
+background: #253442;
+color: white;
+padding: 0 15px;
+font-size: 16px;
 }
-textarea:focus {
-border-color: #888;
+input::placeholder {
+color: #71808d;
+}
+input:focus {
+box-shadow: 0 0 0 2px #2ea6ff;
 }
 button {
 width: 100%;
-padding: 15px;
+height: 52px;
+margin-top: 22px;
 border: none;
 border-radius: 15px;
-background: #111;
+background: #2ea6ff;
 color: white;
-font-size: 17px;
+font-size: 16px;
+font-weight: bold;
 cursor: pointer;
-margin-top: 10px;
+transition: .2s;
+-webkit-tap-highlight-color: transparent;
 }
 button:hover {
-background: #333;
+background: #168edb;
 }
 button:active {
-transform: scale(0.98);
+transform: scale(.97);
 }
+#analysis,
 #result {
+display: none;
+text-align: center;
+}
+.loader {
+font-size: 55px;
+animation: spin 1s infinite linear;
+margin: 20px;
+}
+@keyframes spin {
+0% {
+transform: rotate(0deg);
+}
+100% {
+transform: rotate(360deg);
+}
+}
+.status {
+color: #8d9aa6;
+margin: 15px 0;
+min-height: 20px;
+}
+.progress {
+height: 6px;
+background: #34424e;
+border-radius: 10px;
+overflow: hidden;
+}
+.progress-bar {
+height: 100%;
+width: 0%;
+background: #2ea6ff;
+transition: width .3s;
+}
+.result-icon {
+font-size: 55px;
+}
+.result-name {
+font-size: 25px;
+font-weight: bold;
+margin-top: 10px;
+}
+.result-box {
+background: #253442;
+border-radius: 18px;
+padding: 20px;
 margin-top: 20px;
-padding: 15px;
+}
+.result-title {
+color: #aeb9c2;
+font-size: 13px;
+letter-spacing: .5px;
+}
+.result-text {
+font-size: 19px;
+font-weight: bold;
+line-height: 1.4;
+margin-top: 10px;
+}
+.stats {
+display: flex;
+gap: 10px;
+margin-top: 10px;
+}
+.stat {
+flex: 1;
+background: #202b36;
+padding: 15px 5px;
 border-radius: 15px;
-background: #f0f0f0;
-min-height: 50px;
-font-size: 16px;
-line-height: 1.5;
+}
+.number {
+color: #2ea6ff;
+font-size: 20px;
+font-weight: bold;
+}
+.small {
+color: #8d9aa6;
+font-size: 11px;
+margin-top: 5px;
+}
+.again {
+background: #34424e;
+}
+.again:hover {
+background: #435361;
+}
+.footer {
+text-align: center;
+color: #687783;
+font-size: 11px;
+margin-top: 18px;
 }
 </style>
 </head>
 <body>
-<div class="container">
-<!-- КАРТИНКА -->
-<img src="analyzer.jpg.jpg" alt="Анализатор" class="main-image">
-<h1>Анализатор</h1>
-<textarea
-id="textInput"
-placeholder="Введите текст для анализа..."
-></textarea>
-<button onclick="analyzeText()">
-Анализировать
+<div class="app">
+<!--
+ВАЖНО:
+Файл картинки должен называться:
+analyzer.jpg.jpg
+И лежать рядом с index.html
+-->
+<img
+src="analyzer.jpg.jpg"
+alt="Анализатор"
+class="logo-image"
+id="logoImage"
+onerror="this.classList.add('error')"
+>
+<div class="subtitle">
+честный анализ
+</div>
+<div class="card">
+<!-- ФОРМА -->
+<div id="form">
+<label>👤 Имя человека</label>
+<input
+id="name"
+type="text"
+placeholder="например, Антон гандон"
+autocomplete="off"
+>
+<label>🎂 Возраст</label>
+<input
+id="age"
+type="number"
+placeholder="например, 28"
+min="1"
+max="120"
+>
+<button
+type="button"
+id="startButton"
+onclick="startAnalysis()"
+>
+анализировать....
 </button>
+</div>
+<!-- АНАЛИЗ -->
+<div id="analysis">
+<div class="loader">
+🧠
+</div>
+<h2>
+проводим анализ
+</h2>
+<div
+class="status"
+id="status"
+>
+подключение к остатку мозга...
+</div>
+<div class="progress">
+<div
+class="progress-bar"
+id="bar"
+></div>
+</div>
+</div>
+<!-- РЕЗУЛЬТАТ -->
 <div id="result">
-Здесь появится результат
+<div class="result-icon">
+🧪
+</div>
+<div
+class="result-name"
+id="resultName"
+></div>
+<div class="result-box">
+результаты......
+</div>
+<div
+class="result-text"
+id="resultText"
+></div>
+</div>
+<div class="stats">
+<div class="stat">
+<div
+class="number"
+id="idiot"
+></div>
+<div class="small">
+уровень долбоебизма
+</div>
+</div>
+<div class="stat">
+<div
+class="number"
+id="danger"
+></div>
+<div class="small">
+опасность
+</div>
+</div>
+</div>
+<button
+type="button"
+class="again"
+onclick="resetAnalysis()"
+>
+анализировать ещё раз хз зачем тебе это
+</button>
+</div>
+</div>
+<div class="footer">
+за результат отвечаю
 </div>
 </div>
 <script>
-function analyzeText() {
-const text = document.getElementById("textInput").value.trim();
-const result = document.getElementById("result");
-if (text === "") {
-result.innerHTML = "Сначала введи текст 😭";
+/* =========================================
+РЕЗУЛЬТАТЫ
+========================================= */
+const results = [
+"профессиональный долбоёб по результатам независимой экспертизы.",
+"официально подозрительный человек.",
+"имеет критически низкий уровень адекватности.",
+"слишком много думает о всякой хуете.",
+"в целом нормальный это не точно.",
+"опасно близок к званию главного долбоёба месяца.",
+"выглядит как человек, который скажет «я всё объясню».",
+"обладает уникальной способностью принимать странные решения.",
+"эксперты отказались давать комментарии.",
+"имеет признаки хронического долбоебизма.",
+"слишком уверенно делает хуйню.",
+"система обнаружила подозрительно высокий уровень тупняка.",
+"ментально всё ещё находится в 2017 году.",
+"вероятность нормального решения крайне низкая.",
+"способен испортить даже идеально спланированный день.",
+"опасно харизматичный идиот.",
+"человек-загадка.  он сам не знает, что происходит.",
+"по документам человек. к поведению есть вопросы.",
+"система не смогла определить уровень адекватности.",
+"рекомендуется держать под наблюдением.",
+"мозг работает. иногда.",
+"имеет талант находить проблемы там, где их не существовало.",
+"вероятность того, что он опять что-нибудь выкинет — 100%.",
+"слишком подозрительно нормальный.",
+"обнаружено чрезмерное количество странных решений.",
+"потенциально хороший человек, но расследование продолжается.",
+"имеет лицензию на совершение хуйню.",
+"с научной точки зрения объяснить его поведение невозможно.",
+"мозг загружен на 12%. остальные 88% заняты хернёй.",
+"исследование завершено. результат лучше никому не показывать."
+"исследование завершено. хуй 14 см если понравишься."
+];
+/* =========================================
+СТАТУСЫ АНАЛИЗА
+========================================= */
+const statuses = [
+"подключение к мозгу...",
+"проверяем адекватность...",
+"сканируем историю странных решений...",
+"проверяем здравый смысл...",
+"сравниваем с базой долбоёбов...",
+"оцениваем опасность...",
+"запрашиваем мнение экспертов...",
+"формируем заключение..."
+];
+/* =========================================
+ЗАПУСК АНАЛИЗА
+========================================= */
+function startAnalysis() {
+const name =
+document.getElementById("name")
+.value
+.trim();
+const age =
+document.getElementById("age")
+.value
+.trim();
+/* ПРОВЕРКА ИМЕНИ */
+if (name === "") {
+alert("Введите имя 😭");
+document
+.getElementById("name")
+.focus();
 return;
 }
-const words = text.split(/\s+/).length;
-const characters = text.length;
-result.innerHTML =
-"🔎 Анализ завершён!<br><br>" +
-"Количество слов: <b>" + words + "</b><br>" +
-"Количество символов: <b>" + characters + "</b>";
+/* ПРОВЕРКА ВОЗРАСТА */
+if (age === "") {
+alert("Введите возраст 😭");
+document
+.getElementById("age")
+.focus();
+return;
 }
+/* ПЕРЕКЛЮЧАЕМ ЭКРАН */
+document
+.getElementById("form")
+.style.display = "none";
+document
+.getElementById("analysis")
+.style.display = "block";
+/* СБРАСЫВАЕМ ПРОГРЕСС */
+document
+.getElementById("bar")
+.style.width = "0%";
+let step = 0;
+/* АНИМАЦИЯ АНАЛИЗА */
+const timer = setInterval(function() {
+document
+.getElementById("status")
+.textContent = statuses[step];
+document
+.getElementById("bar")
+.style.width =
+((step + 1) / statuses.length * 100) + "%";
+step++;
+/* АНАЛИЗ ЗАКОНЧЕН */
+if (step >= statuses.length) {
+clearInterval(timer);
+setTimeout(function() {
+showResult(name, age);
+}, 500);
+}
+}, 450);
+}
+/* =========================================
+ПОКАЗ РЕЗУЛЬТАТА
+========================================= */
+function showResult(name, age) {
+/* СЛУЧАЙНЫЙ РЕЗУЛЬТАТ */
+const random =
+Math.floor(
+Math.random() * results.length
+);
+/* УРОВЕНЬ ДОЛБОЕБИЗМА */
+const idiot =
+Math.floor(
+Math.random() * 31
+) + 70;
+/* ОПАСНОСТЬ */
+const danger =
+Math.floor(
+Math.random() * 51
+) + 35;
+/* ПРЯЧЕМ АНАЛИЗ */
+document
+.getElementById("analysis")
+.style.display = "none";
+/* ПОКАЗЫВАЕМ РЕЗУЛЬТАТ */
+document
+.getElementById("result")
+.style.display = "block";
+/* ИМЯ И ВОЗРАСТ */
+document
+.getElementById("resultName")
+.textContent =
+name + ", " + age + " лет";
+/* ТЕКСТ РЕЗУЛЬТАТА */
+document
+.getElementById("resultText")
+.textContent =
+results[random];
+/* ПРОЦЕНТЫ */
+document
+.getElementById("idiot")
+.textContent =
+idiot + "%";
+document
+.getElementById("danger")
+.textContent =
+danger + "%";
+}
+/* =========================================
+АНАЛИЗИРОВАТЬ ЕЩЁ РАЗ
+========================================= */
+function resetAnalysis() {
+document
+.getElementById("result")
+.style.display = "none";
+document
+.getElementById("analysis")
+.style.display = "none";
+document
+.getElementById("form")
+.style.display = "block";
+document
+.getElementById("name")
+.value = "";
+document
+.getElementById("age")
+.value = "";
+document
+.getElementById("bar")
+.style.width = "0%";
+document
+.getElementById("status")
+.textContent =
+"Подключение к мозгу...";
+document
+.getElementById("name")
+.focus();
+}
+/* =========================================
+ENTER = ЗАПУСТИТЬ АНАЛИЗ
+========================================= */
+document
+.getElementById("name")
+.addEventListener(
+"keydown",
+function(event) {
+if (event.key === "Enter") {
+startAnalysis();
+}
+}
+);
+document
+.getElementById("age")
+.addEventListener(
+"keydown",
+function(event) {
+if (event.key === "Enter") {
+startAnalysis();
+}
+}
+);
 </script>
 </body>
 </html>

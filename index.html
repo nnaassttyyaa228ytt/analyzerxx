@@ -3,489 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>анализатор долбоебов</title>
-
+<title>Анализатор</title>
 <style>
 * {
-    box-sizing: border-box;
+box-sizing: border-box;
 }
-
 body {
-    margin: 0;
-    min-height: 100vh;
-    background: #17212b;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    padding: 20px;
+margin: 0;
+min-height: 100vh;
+font-family: Arial, sans-serif;
+background: #f3f3f3;
+display: flex;
+justify-content: center;
+align-items: center;
 }
-
-.app {
-    max-width: 420px;
-    margin: auto;
+.container {
+width: 90%;
+max-width: 500px;
+background: white;
+padding: 30px;
+border-radius: 25px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+text-align: center;
 }
-
-.logo {
-    text-align: center;
-    font-size: 65px;
-    margin-top: 30px;
+.main-image {
+width: 100%;
+max-width: 350px;
+height: auto;
+border-radius: 20px;
+display: block;
+margin: 0 auto 25px;
 }
-
 h1 {
-    text-align: center;
-    margin: 10px 0;
-    font-size: 30px;
+margin: 0 0 20px;
+font-size: 28px;
 }
-
-.subtitle {
-    text-align: center;
-    color: #8d9aa6;
-    margin-bottom: 25px;
+textarea {
+width: 100%;
+height: 120px;
+resize: none;
+padding: 15px;
+border: 2px solid #ddd;
+border-radius: 15px;
+font-size: 16px;
+outline: none;
+margin-bottom: 15px;
 }
-
-.card {
-    background: #202b36;
-    border-radius: 24px;
-    padding: 22px;
+textarea:focus {
+border-color: #888;
 }
-
-label {
-    display: block;
-    color: #aeb9c2;
-    font-size: 14px;
-    margin: 15px 0 7px;
-}
-
-input {
-    width: 100%;
-    height: 52px;
-    border: none;
-    outline: none;
-    border-radius: 14px;
-    background: #253442;
-    color: white;
-    padding: 0 15px;
-    font-size: 16px;
-}
-
 button {
-    width: 100%;
-    height: 52px;
-    margin-top: 22px;
-    border: none;
-    border-radius: 15px;
-    background: #2ea6ff;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
+width: 100%;
+padding: 15px;
+border: none;
+border-radius: 15px;
+background: #111;
+color: white;
+font-size: 17px;
+cursor: pointer;
+margin-top: 10px;
 }
-
-#analysis,
+button:hover {
+background: #333;
+}
+button:active {
+transform: scale(0.98);
+}
 #result {
-    display: none;
-    text-align: center;
+margin-top: 20px;
+padding: 15px;
+border-radius: 15px;
+background: #f0f0f0;
+min-height: 50px;
+font-size: 16px;
+line-height: 1.5;
 }
-
-.loader {
-    font-size: 55px;
-    animation: spin 1s infinite;
-    margin: 20px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.status {
-    color: #8d9aa6;
-    margin: 15px 0;
-}
-
-.progress {
-    height: 6px;
-    background: #34424e;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress-bar {
-    height: 100%;
-    width: 0%;
-    background: #2ea6ff;
-    transition: width .3s;
-}
-
-.result-icon {
-    font-size: 55px;
-}
-
-.result-name {
-    font-size: 25px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.result-box {
-    background: #253442;
-    border-radius: 18px;
-    padding: 20px;
-    margin-top: 20px;
-}
-
-.result-text {
-    font-size: 19px;
-    font-weight: bold;
-    line-height: 1.4;
-    margin-top: 10px;
-}
-
-.stats {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.stat {
-    flex: 1;
-    background: #202b36;
-    padding: 15px 5px;
-    border-radius: 15px;
-}
-
-.number {
-    color: #2ea6ff;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.small {
-    color: #8d9aa6;
-    font-size: 11px;
-    margin-top: 5px;
-}
-
-.again {
-    background: #34424e;
-}
-
-.footer {
-    text-align: center;
-    color: #687783;
-    font-size: 11px;
-    margin-top: 18px;
-}
-    .app-image {
-        text-align: center;
-        margin-top: 25px;
-        margin-bottom: 25px;
-    }
-    .app-image img {
-        width: 220px;
-        height:220px;
-        object-fit: cover; 
-        border-radius: 24px;
-        display: block;
-        margin: 0 auto;
-    }
 </style>
 </head>
-
 <body>
-
-<div class="app">
-
-    <div class="app-image">
-    <img scr=""analyzer.jpg.jpg" alt="анализатор">
-    </div>
-
-    <h1>проанализируй своего тюбика</h1>
-
-    <div class="subtitle">
-        достоверный анализ
-    </div>
-
-    <div class="card">
-
-        <div id="form">
-
-            <label>👤 Имя </label>
-
-            <input
-                id="name"
-                type="text"
-                placeholder="например, антон гандон"
-            >
-
-            <label>🎂 Возраст</label>
-
-            <input
-                id="age"
-                type="number"
-                placeholder="Например, 26"
-            >
-
-            <button type="button" onclick="startAnalysis()">
-                🔬 анализировать...
-            </button>
-
-        </div>
-
-
-        <div id="analysis">
-
-            <div class="loader">
-                🧠
-            </div>
-
-            <h2>
-                проводим исследование...
-            </h2>
-
-            <div
-                class="status"
-                id="status"
-            >
-                подключение к остатку мозга...
-            </div>
-
-            <div class="progress">
-                <div
-                    class="progress-bar"
-                    id="bar"
-                ></div>
-            </div>
-
-        </div>
-
-
-        <div id="result">
-
-            <div class="result-icon">
-                🧪
-            </div>
-
-            <div
-                class="result-name"
-                id="resultName"
-            ></div>
-
-            <div
-                class="result-box"
-            >
-
-                <div>
-                    исследование показало
-                </div>
-
-                <div
-                    class="result-text"
-                    id="resultText"
-                ></div>
-
-            </div>
-
-            <div class="stats">
-
-                <div class="stat">
-                    <div
-                        class="number"
-                        id="idiot"
-                    ></div>
-
-                    <div class="small">
-                        уровень долбоебизма
-                    </div>
-                </div>
-
-                <div class="stat">
-                    <div
-                        class="number"
-                        id="danger"
-                    ></div>
-
-                    <div class="small">
-                        опасность
-                    </div>
-                </div>
-
-            </div>
-
-            <button
-                class="again"
-                onclick="location.reload()"
-            >
-                🔄 анализировать ещё раз хз зачем тебе это
-            </button>
-
-        </div>
-
-    </div>
-
-    <div class="footer">
-        результаты полностью правдивы
-    </div>
-
+<div class="container">
+<!-- КАРТИНКА -->
+<img src="analyzer.jpg.jpg" alt="Анализатор" class="main-image">
+<h1>Анализатор</h1>
+<textarea
+id="textInput"
+placeholder="Введите текст для анализа..."
+></textarea>
+<button onclick="analyzeText()">
+Анализировать
+</button>
+<div id="result">
+Здесь появится результат
 </div>
-
-
+</div>
 <script>
-
-const results = [
-
-"профессиональный долбоёб по результатам независимой экспертизы.",
-"подозрительный человек.",
-"имеет критически низкий уровень адекватности.",
-"слишком много думает о всякой хуете.",
-"в целом нормальный. но это не точно.",
-"опасно близок к званию главного долбоёба месяца.",
-"выглядит как человек, который скажет «я всё объясню».",
-"обладает уникальной способностью принимать странные решения.",
-"эксперты отказались давать комментарии.",
-"имеет признаки хронического долбоебизма.",
-"слишком уверенно делает хуйню.",
-"система обнаружила подозрительно высокий уровень тупняка.",
-"ментально всё ещё находится в 2017 году.",
-"вероятность нормального решения крайне низкая.",
-"способен испортить даже идеально спланированный день.",
-"опасно харизматичный идиот.",
-"человек-загадка. он сам не знает, что за хуйню он творит.",
-"по документам человек.к поведению есть вопросы.",
-"система не смогла определить уровень адекватности.",
-"рекомендуется держать под наблюдением.",
-"мозг работает.редко.",
-"имеет талант находить проблемы там, где их не существовало.",
-"вероятность того, что он опять что-нибудь выкинет — 100%.",
-"слишком подозрительно нормальный.",
-"обнаружено чрезмерное количество странных решений.",
-"потенциально хороший человек, но расследование продолжается.",
-"имеет лицензию на совершение хуйню.",
-"с научной точки зрения объяснить его поведение невозможно.",
-"мозг загружен на 12%. остальные 88% заняты хернёй.",
-"исследование завершено. результат лучше никому не показывать."
-"исследование завершено.хуй 14 см если понравишься"
-    
-
-];
-
-
-const statuses = [
-"подключение к мозгу...",
-"проверяем адекватность...",
-"сканируем историю странных решений...",
-"проверяем здравый смысл...",
-"сравниваем с базой долбоёбов...",
-"оцениваем опасность...",
-"запрашиваем мнение экспертов...",
-"формируем заключение..."
-];
-
-
-function startAnalysis() {
-
-    const name =
-        document.getElementById("name").value.trim();
-
-    const age =
-        document.getElementById("age").value.trim();
-
-    if (!name) {
-        alert("Введите имя 😭");
-        return;
-    }
-
-    if (!age) {
-        alert("Введите возраст 😭");
-        return;
-    }
-
-
-    document.getElementById("form")
-        .style.display = "none";
-
-    document.getElementById("analysis")
-        .style.display = "block";
-
-
-    let step = 0;
-
-    const timer = setInterval(function() {
-
-        document.getElementById("status")
-            .textContent = statuses[step];
-
-        document.getElementById("bar")
-            .style.width =
-            ((step + 1) / statuses.length * 100) + "%";
-
-        step++;
-
-        if (step >= statuses.length) {
-
-            clearInterval(timer);
-
-            setTimeout(function() {
-
-                showResult(name, age);
-
-            }, 500);
-        }
-
-    }, 450);
+function analyzeText() {
+const text = document.getElementById("textInput").value.trim();
+const result = document.getElementById("result");
+if (text === "") {
+result.innerHTML = "Сначала введи текст 😭";
+return;
 }
-
-
-function showResult(name, age) {
-
-    const random =
-        Math.floor(
-            Math.random() * results.length
-        );
-
-    const idiot =
-        Math.floor(
-            Math.random() * 31
-        ) + 70;
-
-    const danger =
-        Math.floor(
-            Math.random() * 51
-        ) + 35;
-
-
-    document.getElementById("analysis")
-        .style.display = "none";
-
-    document.getElementById("result")
-        .style.display = "block";
-
-
-    document.getElementById("resultName")
-        .textContent =
-        name + ", " + age + " лет";
-
-
-    document.getElementById("resultText")
-        .textContent =
-        results[random];
-
-
-    document.getElementById("idiot")
-        .textContent =
-        idiot + "%";
-
-
-    document.getElementById("danger")
-        .textContent =
-        danger + "%";
+const words = text.split(/\s+/).length;
+const characters = text.length;
+result.innerHTML =
+"🔎 Анализ завершён!<br><br>" +
+"Количество слов: <b>" + words + "</b><br>" +
+"Количество символов: <b>" + characters + "</b>";
 }
-
 </script>
-
 </body>
 </html>
